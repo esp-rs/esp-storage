@@ -1,0 +1,33 @@
+[target.riscv32imc-unknown-none-elf]
+runner = "espflash --speed 921600 --monitor"
+
+rustflags = [
+    "-C", "link-arg=-Tlinkall.x",
+]
+ 
+[target.xtensa-esp32-none-elf]
+runner = "espflash --speed 921600 --monitor"
+
+rustflags = [
+    "-C", "link-arg=-Tlinkall.x",
+]
+
+[target.xtensa-esp32s2-none-elf]
+runner = "espflash --speed 921600 --monitor"
+
+rustflags = [
+    "-C", "link-arg=-Tlinkall.x",
+]
+
+[target.xtensa-esp32s3-none-elf]
+runner = "espflash --speed 921600 --monitor"
+
+rustflags = [
+    "-C", "link-arg=-Tlinkall.x",
+]
+
+[build]
+target = "riscv32imc-unknown-none-elf"
+ 
+[unstable]
+build-std = [ "core", "alloc" ]

@@ -1,0 +1,44 @@
+[package]
+name = "esp-storage"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+embedded-storage = "0.3.0"
+
+# specifying dev dependencies by target is less than ideal - however we cannot have feature gated dev-dependencies
+
+[target.riscv32imc-unknown-none-elf.dev-dependencies]
+esp32c3-hal = { package="esp32c3-hal", git = "https://github.com/esp-rs/esp-hal" }
+riscv-rt = { version = "0.8.1" }
+riscv = { version = "0.8.0" }
+esp-println = { git = "https://github.com/esp-rs/esp-println.git", features = [ "esp32c3" ] }
+esp-backtrace = { git = "https://github.com/esp-rs/esp-backtrace.git", features = [ "esp32c3", "panic-handler", "exception-handler" ] }
+
+[target.xtensa-esp32-none-elf.dev-dependencies]
+esp32-hal = { package="esp32-hal", git = "https://github.com/esp-rs/esp-hal" }
+xtensa-lx-rt = { version = "0.11.0" }
+xtensa-lx = { version = "0.7.0" }
+esp-println = { git = "https://github.com/esp-rs/esp-println.git", features = [ "esp32" ] }
+esp-backtrace = { git = "https://github.com/esp-rs/esp-backtrace.git", features = [ "esp32", "panic-handler", "exception-handler" ] }
+
+[target.xtensa-esp32s2-none-elf.dev-dependencies]
+esp32s2-hal = { package="esp32s2-hal", git = "https://github.com/esp-rs/esp-hal" }
+xtensa-lx-rt = { version = "0.11.0" }
+xtensa-lx = { version = "0.7.0" }
+esp-println = { git = "https://github.com/esp-rs/esp-println.git", features = [ "esp32s2" ] }
+esp-backtrace = { git = "https://github.com/esp-rs/esp-backtrace.git", features = [ "esp32s2", "panic-handler", "exception-handler" ] }
+
+[target.xtensa-esp32s3-none-elf.dev-dependencies]
+esp32s3-hal = { package="esp32s3-hal", git = "https://github.com/esp-rs/esp-hal" }
+xtensa-lx-rt = { version = "0.11.0" }
+xtensa-lx = { version = "0.7.0" }
+esp-println = { git = "https://github.com/esp-rs/esp-println.git", features = [ "esp32s3" ] }
+esp-backtrace = { git = "https://github.com/esp-rs/esp-backtrace.git", features = [ "esp32s3", "panic-handler", "exception-handler" ] }
+
+[features]
+esp32c3 = []
+esp32 = []
+esp32s2 = []
+esp32s3 = []
+esp8266 = []

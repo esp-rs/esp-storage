@@ -1,0 +1,27 @@
+{
+    // "editor.formatOnSave": true,
+
+    "rust-analyzer.server.extraEnv": {
+        "CARGO_TARGET_DIR": "./target_ra"
+    },
+
+    "rust-analyzer.cargo.features": [
+        "esp32c3",
+    ],
+    "rust-analyzer.cargo.target": "riscv32imc-unknown-none-elf",
+
+    "rust-analyzer.checkOnSave.allTargets": false,
+    "rust-analyzer.checkOnSave.overrideCommand": [
+        "cargo",
+        "check",
+        "-Z", 
+        "build-std=core",
+        "--features",
+        "esp32c3",
+        "--target",
+        "riscv32imc-unknown-none-elf",
+        "--message-format", 
+        "json",
+        "--examples"
+    ],    
+}
