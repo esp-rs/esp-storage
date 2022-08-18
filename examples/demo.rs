@@ -3,16 +3,18 @@
 
 use embedded_storage::{ReadStorage, Storage};
 #[cfg(feature = "esp32")]
-use esp32_hal::{pac::Peripherals, prelude::*, RtcCntl, Timer};
+use esp32_hal as hal;
 
 #[cfg(feature = "esp32s2")]
-use esp32s2_hal::{pac::Peripherals, prelude::*, RtcCntl, Timer};
+use esp32s2_hal as hal;
 
 #[cfg(feature = "esp32s3")]
-use esp32s3_hal::{pac::Peripherals, prelude::*, RtcCntl, Timer};
+use esp32s3_hal as hal;
 
 #[cfg(feature = "esp32c3")]
-use esp32c3_hal::{pac::Peripherals, prelude::*, RtcCntl, Timer};
+use esp32c3_hal as hal;
+
+use hal::{clock::ClockControl, pac::Peripherals, prelude::*, timer::TimerGroup, Rtc};
 
 use esp_storage::FlashStorage;
 #[cfg(any(feature = "esp32", feature = "esp32s2", feature = "esp32s3"))]
@@ -30,48 +32,64 @@ fn main() -> ! {
 
     #[cfg(any(feature = "esp32", feature = "esp32s2", feature = "esp32s3"))]
     {
-        let mut timer0 = Timer::new(peripherals.TIMG0);
-        let mut rtc_cntl = RtcCntl::new(peripherals.RTC_CNTL);
+        #[cfg(feature = "esp32")]
+        let system = peripherals.DPORT.split();
+        #[cfg(not(feature = "esp32"))]
+        let system = peripherals.SYSTEM.split();
+
+        let clocks = ClockControl::boot_defaults(system.clock_control).freeze();
+
+        let timer_group0 = TimerGroup::new(peripherals.TIMG0, &clocks);
+        let mut wdt = timer_group0.wdt;
+        let mut rtc = Rtc::new(peripherals.RTC_CNTL);
 
         // Disable MWDT and RWDT (Watchdog) flash boot protection
-        timer0.disable();
-        rtc_cntl.set_wdt_global_enable(false);
+        wdt.disable();
+        rtc.rwdt.disable();
     }
 
     #[cfg(feature = "esp32c3")]
     {
-        // Disable the watchdog timers. For the ESP32-C3, this includes the Super WDT,
-        // the RTC WDT, and the TIMG WDTs.
-        let mut rtc_cntl = RtcCntl::new(peripherals.RTC_CNTL);
-        let mut timer0 = Timer::new(peripherals.TIMG0);
-        let mut timer1 = Timer::new(peripherals.TIMG1);
+        let system = peripherals.SYSTEM.split();
+        let clocks = ClockControl::boot_defaults(system.clock_control).freeze();
 
-        rtc_cntl.set_super_wdt_enable(false);
-        rtc_cntl.set_wdt_enable(false);
-        timer0.disable();
-        timer1.disable();
+        let mut rtc = Rtc::new(peripherals.RTC_CNTL);
+        let timer_group0 = TimerGroup::new(peripherals.TIMG0, &clocks);
+        let mut wdt0 = timer_group0.wdt;
+        let timer_group1 = TimerGroup::new(peripherals.TIMG1, &clocks);
+        let mut wdt1 = timer_group1.wdt;
+
+        rtc.swd.disable();
+        rtc.rwdt.disable();
+        wdt0.disable();
+        wdt1.disable();
     }
 
     let mut bytes = [0u8; 32];
 
     let mut flash = FlashStorage::new();
 
+    let flash_addr = 0x9000;
     println!("Flash size = {}", flash.capacity());
 
-    flash.read(0x9000, &mut bytes).unwrap();
-    println!("Read from 0x9000:  {:02x?}", bytes);
+    flash.read(flash_addr, &mut bytes).unwrap();
+    println!("Read from {:x}:  {:02x?}", flash_addr, &bytes[..32]);
 
     bytes[0x00] = bytes[0x00].wrapping_add(1);
     bytes[0x01] = bytes[0x01].wrapping_add(2);
     bytes[0x02] = bytes[0x02].wrapping_add(3);
     bytes[0x03] = bytes[0x03].wrapping_add(4);
+    bytes[0x04] = bytes[0x04].wrapping_add(1);
+    bytes[0x05] = bytes[0x05].wrapping_add(2);
+    bytes[0x06] = bytes[0x06].wrapping_add(3);
+    bytes[0x07] = bytes[0x07].wrapping_add(4);
 
-    flash.write(0x9000, &bytes).unwrap();
-    println!("Written to 0x9000: {:02x?}", bytes);
+    flash.write(flash_addr, &bytes).unwrap();
+    println!("Written to {:x}: {:02x?}", flash_addr, &bytes[..32]);
 
     let mut reread_bytes = [0u8; 32];
-    flash.read(0x9000, &mut reread_bytes).unwrap();
-    println!("Read from 0x9000:  {:02x?}", reread_bytes);
+    flash.read(flash_addr, &mut reread_bytes).unwrap();
+    println!("Read from {:x}:  {:02x?}", flash_addr, &reread_bytes[..32]);
 
     loop {}
 }

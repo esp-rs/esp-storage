@@ -6,7 +6,7 @@
     },
 
     "rust-analyzer.cargo.features": [
-        "esp32c3",
+        "esp32",
     ],
     "rust-analyzer.cargo.target": "riscv32imc-unknown-none-elf",
 
@@ -17,7 +17,7 @@
         "-Z", 
         "build-std=core",
         "--features",
-        "esp32c3",
+        "esp32",
         "--target",
         "riscv32imc-unknown-none-elf",
         "--message-format", 
