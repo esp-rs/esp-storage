@@ -4,9 +4,7 @@ This implements `embedded-storage` traits to access unencrypted ESP32 flash.
 
 ## Implementation status
 
-Currently ESP32-S2 doesn't work. (Fails at writing)
-
-ESP32, ESP32-S3 and ESP32-C3 work
+ESP32, ESP32-S2, ESP32-S3 and ESP32-C3 work
 
 ## Run examples
 
