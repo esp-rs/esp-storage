@@ -7,7 +7,7 @@ authors = [
     "Björn Quentin <bjoern.quentin@mobile-j.de>",
 ]
 description  = "Implementation of embedded-storage traits to access unencrypted ESP32 flash"
-repository   = "https://github.com/bjoernQ/esp-storage"
+repository   = "https://github.com/esp-rs/esp-storage"
 license      = "MIT OR Apache-2.0"
 
 keywords = [
