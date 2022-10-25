@@ -29,7 +29,7 @@ embedded-storage = "0.3.0"
 [target.riscv32imc-unknown-none-elf.dev-dependencies]
 esp32c3-hal = { version = "0.2.0" }
 riscv-rt = { version = "0.9.0" }
-riscv = { version = "0.8.0" }
+riscv = { version = "0.9.0" }
 esp-println = { version = "0.3.0", features = [ "esp32c3" ] }
 esp-backtrace = { git = "https://github.com/esp-rs/esp-backtrace.git", features = [ "esp32c3", "panic-handler", "exception-handler" ] }
 
@@ -55,6 +55,7 @@ esp-println = { version = "0.3.0", features = [ "esp32s3" ] }
 esp-backtrace = { git = "https://github.com/esp-rs/esp-backtrace.git", features = [ "esp32s3", "panic-handler", "exception-handler" ] }
 
 [features]
+esp32c2 = []
 esp32c3 = []
 esp32 = []
 esp32s2 = []

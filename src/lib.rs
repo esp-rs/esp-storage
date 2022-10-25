@@ -2,6 +2,7 @@
 
 use embedded_storage::{ReadStorage, Storage};
 
+#[cfg_attr(feature = "esp32c2", path = "esp32c2.rs")]
 #[cfg_attr(feature = "esp32c3", path = "esp32c3.rs")]
 #[cfg_attr(feature = "esp32", path = "esp32.rs")]
 #[cfg_attr(feature = "esp32s2", path = "esp32s2.rs")]
