@@ -16,6 +16,16 @@ ESP32, ESP32-S2, ESP32-S3 and ESP32-C3 work
 
 `cargo "+nightly" run --example demo --features esp32c3 --target riscv32imc-unknown-none-elf`
 
+To run the example for ESP32-C2 you need to modify `Cargo-toml`, section `target.riscv32imc-unknown-none-elf.dev-dependencies` like this:
+
+```toml
+esp32c2-hal = { git = "https://github.com/esp-rs/esp-hal/", package = "esp32c2-hal" }
+riscv-rt = { version = "0.9.0" }
+riscv = { version = "0.9.0" }
+esp-println = { version = "0.3.0", features = [ "esp32c2" ] }
+esp-backtrace = { git = "https://github.com/esp-rs/esp-backtrace.git", features = [ "esp32c2", "panic-handler", "exception-handler" ] }
+```
+
 ## Important
 
 For ESP32 it is necessary to build with optimization level 2 or 3.

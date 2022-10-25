@@ -14,13 +14,16 @@ use esp32s3_hal as hal;
 #[cfg(feature = "esp32c3")]
 use esp32c3_hal as hal;
 
+#[cfg(feature = "esp32c2")]
+use esp32c2_hal as hal;
+
 use hal::{clock::ClockControl, pac::Peripherals, prelude::*, timer::TimerGroup, Rtc};
 
 use esp_storage::FlashStorage;
 #[cfg(any(feature = "esp32", feature = "esp32s2", feature = "esp32s3"))]
 use xtensa_lx_rt::entry;
 
-#[cfg(feature = "esp32c3")]
+#[cfg(any(feature = "esp32c3", feature = "esp32c2"))]
 use riscv_rt::entry;
 
 use esp_backtrace as _;
@@ -48,7 +51,7 @@ fn main() -> ! {
         rtc.rwdt.disable();
     }
 
-    #[cfg(feature = "esp32c3")]
+    #[cfg(any(feature = "esp32c3", feature = "esp32c2"))]
     {
         let system = peripherals.SYSTEM.split();
         let clocks = ClockControl::boot_defaults(system.clock_control).freeze();
@@ -56,12 +59,16 @@ fn main() -> ! {
         let mut rtc = Rtc::new(peripherals.RTC_CNTL);
         let timer_group0 = TimerGroup::new(peripherals.TIMG0, &clocks);
         let mut wdt0 = timer_group0.wdt;
+
+        #[cfg(not(feature = "esp32c2"))]
         let timer_group1 = TimerGroup::new(peripherals.TIMG1, &clocks);
+        #[cfg(not(feature = "esp32c2"))]
         let mut wdt1 = timer_group1.wdt;
 
         rtc.swd.disable();
         rtc.rwdt.disable();
         wdt0.disable();
+        #[cfg(not(feature = "esp32c2"))]
         wdt1.disable();
     }
 
