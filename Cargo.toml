@@ -27,32 +27,32 @@ embedded-storage = "0.3.0"
 # specifying dev dependencies by target is less than ideal - however we cannot have feature gated dev-dependencies
 
 [target.riscv32imc-unknown-none-elf.dev-dependencies]
-esp32c3-hal = { version = "0.2.0" }
-riscv-rt = { version = "0.9.0" }
+esp32c3-hal = { version = "0.4.0" }
+riscv-rt = { version = "0.10.0" }
 riscv = { version = "0.9.0" }
 esp-println = { version = "0.3.0", features = [ "esp32c3" ] }
-esp-backtrace = { git = "https://github.com/esp-rs/esp-backtrace.git", features = [ "esp32c3", "panic-handler", "exception-handler" ] }
+esp-backtrace = { version = "0.4.0", features = [ "esp32c3", "panic-handler", "exception-handler" ] }
 
 [target.xtensa-esp32-none-elf.dev-dependencies]
-esp32-hal = { version = "0.5.0" }
-xtensa-lx-rt = { version = "0.13.0" }
+esp32-hal = { version = "0.7.0" }
+xtensa-lx-rt = { version = "0.14.0" }
 xtensa-lx = { version = "0.7.0" }
-esp-println = { version = "0.3.0", features = [ "esp32" ] }
-esp-backtrace = { git = "https://github.com/esp-rs/esp-backtrace.git", features = [ "esp32", "panic-handler", "exception-handler" ] }
+esp-println = { version = "0.3.1", features = [ "esp32" ] }
+esp-backtrace = { version = "0.4.0", features = [ "esp32", "panic-handler", "exception-handler" ] }
 
 [target.xtensa-esp32s2-none-elf.dev-dependencies]
-esp32s2-hal = { version = "0.2.0" }
-xtensa-lx-rt = { version = "0.13.0" }
+esp32s2-hal = { version = "0.4.0" }
+xtensa-lx-rt = { version = "0.14.0" }
 xtensa-lx = { version = "0.7.0" }
-esp-println = { version = "0.3.0", features = [ "esp32s2" ] }
-esp-backtrace = { git = "https://github.com/esp-rs/esp-backtrace.git", features = [ "esp32s2", "panic-handler", "exception-handler" ] }
+esp-println = { version = "0.3.1", features = [ "esp32s2" ] }
+esp-backtrace = { version = "0.4.0", features = [ "esp32s2", "panic-handler", "exception-handler" ] }
 
 [target.xtensa-esp32s3-none-elf.dev-dependencies]
-esp32s3-hal = { version = "0.2.0" }
-xtensa-lx-rt = { version = "0.13.0" }
+esp32s3-hal = { version = "0.4.0" }
+xtensa-lx-rt = { version = "0.14.0" }
 xtensa-lx = { version = "0.7.0" }
 esp-println = { version = "0.3.0", features = [ "esp32s3" ] }
-esp-backtrace = { git = "https://github.com/esp-rs/esp-backtrace.git", features = [ "esp32s3", "panic-handler", "exception-handler" ] }
+esp-backtrace = { version = "0.4.0", features = [ "esp32s3", "panic-handler", "exception-handler" ] }
 
 [features]
 esp32c2 = []
