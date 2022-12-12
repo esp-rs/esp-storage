@@ -20,10 +20,10 @@ To run the example for ESP32-C2 you need to modify `Cargo-toml`, section `target
 
 ```toml
 esp32c2-hal = { git = "https://github.com/esp-rs/esp-hal/", package = "esp32c2-hal" }
-riscv-rt = { version = "0.9.0" }
+riscv-rt = { version = "0.10.0" }
 riscv = { version = "0.9.0" }
 esp-println = { version = "0.3.0", features = [ "esp32c2" ] }
-esp-backtrace = { git = "https://github.com/esp-rs/esp-backtrace.git", features = [ "esp32c2", "panic-handler", "exception-handler" ] }
+esp-backtrace = { version = "0.4.0", features = [ "esp32c2", "panic-handler", "exception-handler" ] }
 ```
 
 ## Important
