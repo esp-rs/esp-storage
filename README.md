@@ -4,7 +4,7 @@ This implements `embedded-storage` traits to access unencrypted ESP32 flash.
 
 ## Implementation status
 
-ESP32, ESP32-S2, ESP32-S3 and ESP32-C3 work
+ESP32, ESP32-S2, ESP32-S3, ESP32-C2 and ESP32-C3 work
 
 ## Run examples
 
@@ -37,6 +37,7 @@ To make it work also for debug builds add this to your `Cargo.toml`
 opt-level = 3
 ```
 
+Make sure to call the functions in an interrupt-free context.
 
 ## License
 
