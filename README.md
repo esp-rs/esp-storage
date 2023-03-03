@@ -16,14 +16,14 @@ ESP32, ESP32-S2, ESP32-S3, ESP32-C2 and ESP32-C3 work
 
 `cargo "+nightly" run --example demo --features esp32c3 --target riscv32imc-unknown-none-elf`
 
+`cargo "+nightly" run --example demo --features esp32c6 --target riscv32imac-unknown-none-elf`
+
 To run the example for ESP32-C2 you need to modify `Cargo-toml`, section `target.riscv32imc-unknown-none-elf.dev-dependencies` like this:
 
 ```toml
-esp32c2-hal = { git = "https://github.com/esp-rs/esp-hal/", package = "esp32c2-hal" }
-riscv-rt = { version = "0.10.0" }
-riscv = { version = "0.9.0" }
-esp-println = { version = "0.3.0", features = [ "esp32c2" ] }
-esp-backtrace = { version = "0.4.0", features = [ "esp32c2", "panic-handler", "exception-handler" ] }
+esp32c2-hal = { version = "0.5.1" }
+esp-println = { version = "0.4.0", features = [ "esp32c2" ] }
+esp-backtrace = { version = "0.6.0", features = [ "esp32c2", "panic-handler", "exception-handler", "print-uart"] }
 ```
 
 ## Important
