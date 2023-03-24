@@ -1,10 +1,10 @@
 # esp-storage
 
-This implements `embedded-storage` traits to access unencrypted ESP32 flash.
+This implements [`embedded-storage`](https://github.com/rust-embedded-community/embedded-storage) traits to access unencrypted ESP32 flash.
 
-## Implementation status
+## Current support
 
-ESP32, ESP32-S2, ESP32-S3, ESP32-C2 and ESP32-C3 work
+ESP32, ESP32-S2, ESP32-S3, ESP32-C2, ESP32-C3, and ESP32-C6 are supported in `esp-storage`
 
 ## Run examples
 
