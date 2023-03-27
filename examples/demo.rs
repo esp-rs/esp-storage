@@ -23,11 +23,6 @@ use esp32c6_hal as hal;
 use hal::{clock::ClockControl, peripherals::Peripherals, prelude::*, timer::TimerGroup, Rtc};
 
 use esp_storage::FlashStorage;
-#[cfg(any(feature = "esp32", feature = "esp32s2", feature = "esp32s3"))]
-use xtensa_lx_rt::entry;
-
-#[cfg(any(feature = "esp32c3", feature = "esp32c2"))]
-use riscv_rt::entry;
 
 use esp_backtrace as _;
 use esp_println::println;

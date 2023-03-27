@@ -23,6 +23,7 @@ categories = [
 
 [dependencies]
 embedded-storage = "0.3.0"
+critical-section = { version =  "1.0.1", optional = true }
 
 # specifying dev dependencies by target is less than ideal - however we cannot have feature gated dev-dependencies
 
@@ -53,9 +54,10 @@ esp-println = { version = "0.4.0", features = [ "esp32s3" ] }
 esp-backtrace = { version = "0.6.0", features = [ "esp32s3", "panic-handler", "exception-handler", "print-uart"] }
 
 [features]
+critical-section = ["dep:critical-section"]
 esp32c2 = []
 esp32c3 = []
 esp32c6 = []
-esp32 = []
+esp32 = ["critical-section"]
 esp32s2 = []
 esp32s3 = []
