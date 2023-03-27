@@ -14,6 +14,12 @@ const SPI0_EXT2_REG: u32 = SPI0_BASE_REG + 0xF8;
 const SPI_RD_STATUS_REG: u32 = SPI_BASE_REG + 0x10;
 const SPI_ST: u32 = 0x7;
 const SPI_CMD_REG: u32 = SPI_BASE_REG + 0x00;
+const SPI_USER_REG: u32 = SPI_BASE_REG + 0x1c;
+const SPI_USER1_REG: u32 = SPI_BASE_REG + 0x20;
+const SPI_USR_DUMMY: u32 = 1 << 29;
+const ESP_ROM_SPIFLASH_W_SIO_ADDR_BITSLEN: u32 = 23;
+const SPI_USR_ADDR_BITLEN_M: u32 = 0x3f << 26;
+const SPI_USR_ADDR_BITLEN_S: u32 = 26;
 const PERIPHS_SPI_FLASH_ADDR: u32 = SPI_BASE_REG + 4;
 const PERIPHS_SPI_FLASH_C0: u32 = SPI_BASE_REG + 0x80;
 const SPI_FLASH_WREN: u32 = 1 << 30;
@@ -141,28 +147,38 @@ pub(crate) fn esp_rom_spiflash_erase_sector(sector_number: u32) -> i32 {
 #[link_section = ".rwtext"]
 pub(crate) fn esp_rom_spiflash_write(dest_addr: u32, data: *const u8, len: u32) -> i32 {
     with(|| {
+        spiflash_wait_for_ready();
         begin();
 
-        for block in (0..len).step_by(32 * 4) {
+        write_register(SPI_USER_REG, read_register(SPI_USER_REG) & !SPI_USR_DUMMY);
+        let addrbits = ESP_ROM_SPIFLASH_W_SIO_ADDR_BITSLEN;
+        let mut regval = read_register(SPI_USER1_REG);
+        regval &= !SPI_USR_ADDR_BITLEN_M;
+        regval |= addrbits << SPI_USR_ADDR_BITLEN_S;
+        write_register(SPI_USER1_REG, regval);
+
+        for block in (0..len).step_by(32) {
+            spiflash_wait_for_ready();
             spi_write_enable();
 
-            let block_len = if (len - block) % (32 * 4) == 0 {
-                32 * 4
+            let block_len = if (len - block) % 32 == 0 {
+                32
             } else {
-                (len - block) % (32 * 4)
+                (len - block) % 32
             };
             write_register(
                 PERIPHS_SPI_FLASH_ADDR,
-                (dest_addr + block) | block_len << 24,
+                ((dest_addr + block) & 0xffffff) | block_len << 24,
             );
 
             let data_ptr = unsafe { data.offset(block as isize) as *const u32 };
             for i in 0..block_len / 4 {
-                write_register(PERIPHS_SPI_FLASH_C0 + 4 * i, unsafe {
+                write_register(PERIPHS_SPI_FLASH_C0 + (4 * i), unsafe {
                     data_ptr.offset(i as isize).read_volatile()
                 });
             }
 
+            write_register(SPI_RD_STATUS_REG, 0);
             write_register(SPI_CMD_REG, 1 << 25); // FLASH PP
             while read_register(SPI_CMD_REG) != 0 { /* wait */ }
 

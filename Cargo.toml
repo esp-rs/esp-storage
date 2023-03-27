@@ -53,6 +53,10 @@ esp32s3-hal = { version = "0.7.0" }
 esp-println = { version = "0.4.0", features = [ "esp32s3" ] }
 esp-backtrace = { version = "0.6.0", features = [ "esp32s3", "panic-handler", "exception-handler", "print-uart"] }
 
+[[example]]
+name              = "low_level"
+required-features = ["low-level"]
+
 [features]
 critical-section = ["dep:critical-section"]
 esp32c2 = []
@@ -61,3 +65,5 @@ esp32c6 = []
 esp32 = ["critical-section"]
 esp32s2 = []
 esp32s3 = []
+
+low-level = []
