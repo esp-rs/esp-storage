@@ -58,12 +58,14 @@ name              = "low_level"
 required-features = ["low-level"]
 
 [features]
+default = ["critical-section"]
 critical-section = ["dep:critical-section"]
 esp32c2 = []
 esp32c3 = []
 esp32c6 = []
-esp32 = ["critical-section"]
+esp32   = []
 esp32s2 = []
 esp32s3 = []
 
+# this feature is reserved for very specific use-cases - usually you don't want to use this!
 low-level = []

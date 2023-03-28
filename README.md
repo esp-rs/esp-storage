@@ -37,8 +37,6 @@ To make it work also for debug builds add this to your `Cargo.toml`
 opt-level = 3
 ```
 
-Make sure to call the functions in an interrupt-free context. On ESP32 there is the default-feauture `critical-section` which will ensure this.
-
 ## License
 
 Licensed under either of

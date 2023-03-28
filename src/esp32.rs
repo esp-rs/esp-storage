@@ -1,3 +1,5 @@
+use crate::maybe_with_critical_section;
+
 const ESP_ROM_SPIFLASH_READ: u32 = 0x40062ed8;
 const ESP_ROM_SPIFLASH_ERASE_SECTOR: u32 = 0x40062ccc;
 const SPI_READ_STATUS_HIGH: u32 = 0x40062448;
@@ -116,7 +118,7 @@ pub struct EspRomSpiflashChipT {
 #[inline(never)]
 #[link_section = ".rwtext"]
 pub(crate) fn esp_rom_spiflash_read(src_addr: u32, data: *const u32, len: u32) -> i32 {
-    with(|| {
+    maybe_with_critical_section(|| {
         spiflash_wait_for_ready();
         unsafe {
             let esp_rom_spiflash_read: unsafe extern "C" fn(u32, *const u32, u32) -> i32 =
@@ -129,7 +131,7 @@ pub(crate) fn esp_rom_spiflash_read(src_addr: u32, data: *const u32, len: u32) -
 #[inline(never)]
 #[link_section = ".rwtext"]
 pub(crate) fn esp_rom_spiflash_erase_sector(sector_number: u32) -> i32 {
-    with(|| {
+    maybe_with_critical_section(|| {
         let res = unsafe {
             let esp_rom_spiflash_erase_sector: unsafe extern "C" fn(u32) -> i32 =
                 core::mem::transmute(ESP_ROM_SPIFLASH_ERASE_SECTOR);
@@ -146,7 +148,7 @@ pub(crate) fn esp_rom_spiflash_erase_sector(sector_number: u32) -> i32 {
 #[inline(never)]
 #[link_section = ".rwtext"]
 pub(crate) fn esp_rom_spiflash_write(dest_addr: u32, data: *const u8, len: u32) -> i32 {
-    with(|| {
+    maybe_with_critical_section(|| {
         spiflash_wait_for_ready();
         begin();
 
@@ -240,7 +242,7 @@ fn spi_write_enable() {
 #[inline(never)]
 #[link_section = ".rwtext"]
 pub(crate) fn esp_rom_spiflash_unlock() -> i32 {
-    with(|| {
+    maybe_with_critical_section(|| {
         begin();
         let flashchip = FLASH_CHIP_ADDR as *const EspRomSpiflashChipT;
         let mut status: u32 = 0;
@@ -274,13 +276,4 @@ pub(crate) fn esp_rom_spiflash_unlock() -> i32 {
         end();
         0
     })
-}
-
-#[inline(always)]
-fn with<R>(f: impl FnOnce() -> R) -> R {
-    #[cfg(feature = "critical-section")]
-    return critical_section::with(|_| f());
-
-    #[cfg(not(feature = "critical-section"))]
-    f()
 }

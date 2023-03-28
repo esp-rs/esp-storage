@@ -1,3 +1,8 @@
+//! This shows usage of the underlying low-level API
+//!
+//! Using this API is generally discouraged and reserved to a few very special use-cases.
+//!
+
 #![no_std]
 #![no_main]
 
