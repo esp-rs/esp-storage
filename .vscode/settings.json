@@ -6,22 +6,7 @@
     },
 
     "rust-analyzer.cargo.features": [
-        "esp32c6",
+        "esp32","low-level"
     ],
-    "rust-analyzer.cargo.target": "riscv32imac-unknown-none-elf",
-
-    "rust-analyzer.checkOnSave.allTargets": false,
-    "rust-analyzer.checkOnSave.overrideCommand": [
-        "cargo",
-        "check",
-        "-Z", 
-        "build-std=core",
-        "--features",
-        "esp32c6",
-        "--target",
-        "riscv32imac-unknown-none-elf",
-        "--message-format", 
-        "json",
-        "--examples"
-    ],    
+    "rust-analyzer.cargo.target": "xtensa-esp32-none-elf",
 }

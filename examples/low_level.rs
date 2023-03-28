@@ -1,7 +1,11 @@
+//! This shows usage of the underlying low-level API
+//!
+//! Using this API is generally discouraged and reserved to a few very special use-cases.
+//!
+
 #![no_std]
 #![no_main]
 
-use embedded_storage::{ReadStorage, Storage};
 #[cfg(feature = "esp32")]
 use esp32_hal as hal;
 
@@ -21,8 +25,6 @@ use esp32c2_hal as hal;
 use esp32c6_hal as hal;
 
 use hal::{clock::ClockControl, peripherals::Peripherals, prelude::*, timer::TimerGroup, Rtc};
-
-use esp_storage::FlashStorage;
 
 use esp_backtrace as _;
 use esp_println::println;
@@ -91,15 +93,19 @@ fn main() -> ! {
         wdt1.disable();
     }
 
-    let mut bytes = [0u8; 32];
-
-    let mut flash = FlashStorage::new();
-
+    let mut bytes = [0u8; 48];
     let flash_addr = 0x9000;
-    println!("Flash size = {}", flash.capacity());
 
-    flash.read(flash_addr, &mut bytes).unwrap();
-    println!("Read from {:x}:  {:02x?}", flash_addr, &bytes[..32]);
+    unsafe {
+        esp_storage::ll::spiflash_read(
+            flash_addr,
+            bytes.as_mut_ptr() as *mut u32,
+            bytes.len() as u32,
+        )
+    }
+    .unwrap();
+
+    println!("Read from {:x}:  {:02x?}", flash_addr, &bytes[..48]);
 
     bytes[0x00] = bytes[0x00].wrapping_add(1);
     bytes[0x01] = bytes[0x01].wrapping_add(2);
@@ -110,12 +116,26 @@ fn main() -> ! {
     bytes[0x06] = bytes[0x06].wrapping_add(3);
     bytes[0x07] = bytes[0x07].wrapping_add(4);
 
-    flash.write(flash_addr, &bytes).unwrap();
-    println!("Written to {:x}: {:02x?}", flash_addr, &bytes[..32]);
+    unsafe { esp_storage::ll::spiflash_unlock() }.unwrap();
 
-    let mut reread_bytes = [0u8; 32];
-    flash.read(flash_addr, &mut reread_bytes).unwrap();
-    println!("Read from {:x}:  {:02x?}", flash_addr, &reread_bytes[..32]);
+    unsafe { esp_storage::ll::spiflash_erase_sector(flash_addr / 4096) }.unwrap();
+
+    unsafe {
+        esp_storage::ll::spiflash_write(flash_addr, bytes.as_ptr() as *const u8, bytes.len() as u32)
+    }
+    .unwrap();
+    println!("Written to {:x}: {:02x?}", flash_addr, &bytes[..48]);
+
+    let mut reread_bytes = [0u8; 48];
+    unsafe {
+        esp_storage::ll::spiflash_read(
+            flash_addr,
+            reread_bytes.as_mut_ptr() as *mut u32,
+            reread_bytes.len() as u32,
+        )
+    }
+    .unwrap();
+    println!("Read from {:x}:  {:02x?}", flash_addr, &reread_bytes[..48]);
 
     loop {}
 }
