@@ -1,13 +1,17 @@
 use crate::maybe_with_critical_section;
+use core::mem::transmute;
 
-const ESP_ROM_SPIFLASH_READ: u32 = 0x40062ed8;
-const ESP_ROM_SPIFLASH_ERASE_SECTOR: u32 = 0x40062ccc;
-const SPI_READ_STATUS_HIGH: u32 = 0x40062448;
-const SPI_WRITE_STATUS: u32 = 0x400622f0;
+const ESP_ROM_SPIFLASH_READ: unsafe extern "C" fn(u32, *const u32, u32) -> i32 =
+    transmute(0x40062ed8);
+const ESP_ROM_SPIFLASH_ERASE_SECTOR: unsafe extern "C" fn(u32) -> i32 = transmute(0x40062ccc);
+const SPI_READ_STATUS_HIGH: unsafe extern "C" fn(*const EspRomSpiflashChipT, *mut u32) -> i32 =
+    transmute(0x40062448);
+const SPI_WRITE_STATUS: unsafe extern "C" fn(*const EspRomSpiflashChipT, u32) -> i32 =
+    transmute(0x400622f0);
 
-const CACHE_READ_DISABLE_ROM: u32 = 0x40009ab8;
-const CACHE_FLUSH_ROM: u32 = 0x40009a14;
-const CACHE_READ_ENABLE_ROM: u32 = 0x40009a84;
+const CACHE_READ_DISABLE_ROM: unsafe extern "C" fn(u32) = transmute(0x40009ab8);
+const CACHE_FLUSH_ROM: unsafe extern "C" fn(u32) = transmute(0x40009a14);
+const CACHE_READ_ENABLE_ROM: unsafe extern "C" fn(u32) = transmute(0x40009a84);
 
 const SPI_BASE_REG: u32 = 0x3ff42000; /* SPI peripheral 1, used for SPI flash */
 const SPI0_BASE_REG: u32 = 0x3ff43000; /* SPI peripheral 0, inner state machine */
@@ -37,30 +41,19 @@ const FLASH_CHIP_ADDR: u32 = 0x3ffae270;
 #[inline(always)]
 #[link_section = ".rwtext"]
 pub(crate) fn cache_read_disable_rom(cpu_num: u32) {
-    unsafe {
-        let cache_read_disable_rom: unsafe extern "C" fn(u32) =
-            core::mem::transmute(CACHE_READ_DISABLE_ROM);
-        cache_read_disable_rom(cpu_num)
-    }
+    unsafe { CACHE_READ_DISABLE_ROM(cpu_num) }
 }
 
 #[inline(always)]
 #[link_section = ".rwtext"]
 pub(crate) fn cache_flush_rom(cpu_num: u32) {
-    unsafe {
-        let cache_flush_rom: unsafe extern "C" fn(u32) = core::mem::transmute(CACHE_FLUSH_ROM);
-        cache_flush_rom(cpu_num)
-    }
+    unsafe { CACHE_FLUSH_ROM(cpu_num) }
 }
 
 #[inline(always)]
 #[link_section = ".rwtext"]
 pub(crate) fn cache_read_enable_rom(cpu_num: u32) {
-    unsafe {
-        let cache_read_enable_rom: unsafe extern "C" fn(u32) =
-            core::mem::transmute(CACHE_READ_ENABLE_ROM);
-        cache_read_enable_rom(cpu_num)
-    }
+    unsafe { CACHE_READ_ENABLE_ROM(cpu_num) }
 }
 
 #[inline(always)]
@@ -69,23 +62,13 @@ pub(crate) fn spi_read_status_high(
     flash_chip: *const EspRomSpiflashChipT,
     status: &mut u32,
 ) -> i32 {
-    unsafe {
-        let spi_read_status_high: unsafe extern "C" fn(
-            *const EspRomSpiflashChipT,
-            *mut u32,
-        ) -> i32 = core::mem::transmute(SPI_READ_STATUS_HIGH);
-        spi_read_status_high(flash_chip, status as *mut u32)
-    }
+    unsafe { SPI_READ_STATUS_HIGH(flash_chip, status as *mut u32) }
 }
 
 #[inline(always)]
 #[link_section = ".rwtext"]
 pub(crate) fn spi_write_status(flash_chip: *const EspRomSpiflashChipT, status_value: u32) -> i32 {
-    unsafe {
-        let spi_write_status: unsafe extern "C" fn(*const EspRomSpiflashChipT, u32) -> i32 =
-            core::mem::transmute(SPI_WRITE_STATUS);
-        spi_write_status(flash_chip, status_value)
-    }
+    unsafe { SPI_WRITE_STATUS(flash_chip, status_value) }
 }
 
 #[inline(always)]
@@ -120,11 +103,7 @@ pub struct EspRomSpiflashChipT {
 pub(crate) fn esp_rom_spiflash_read(src_addr: u32, data: *const u32, len: u32) -> i32 {
     maybe_with_critical_section(|| {
         spiflash_wait_for_ready();
-        unsafe {
-            let esp_rom_spiflash_read: unsafe extern "C" fn(u32, *const u32, u32) -> i32 =
-                core::mem::transmute(ESP_ROM_SPIFLASH_READ);
-            esp_rom_spiflash_read(src_addr, data, len)
-        }
+        unsafe { ESP_ROM_SPIFLASH_READ(src_addr, data, len) }
     })
 }
 
@@ -132,11 +111,7 @@ pub(crate) fn esp_rom_spiflash_read(src_addr: u32, data: *const u32, len: u32) -
 #[link_section = ".rwtext"]
 pub(crate) fn esp_rom_spiflash_erase_sector(sector_number: u32) -> i32 {
     maybe_with_critical_section(|| {
-        let res = unsafe {
-            let esp_rom_spiflash_erase_sector: unsafe extern "C" fn(u32) -> i32 =
-                core::mem::transmute(ESP_ROM_SPIFLASH_ERASE_SECTOR);
-            esp_rom_spiflash_erase_sector(sector_number)
-        };
+        let res = unsafe { ESP_ROM_SPIFLASH_ERASE_SECTOR(sector_number) };
 
         if res != 0 {
             end();
