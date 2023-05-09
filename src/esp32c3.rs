@@ -29,9 +29,9 @@ pub(crate) fn esp_rom_spiflash_erase_sector(sector_number: u32) -> i32 {
     })
 }
 
-pub(crate) fn esp_rom_spiflash_write(dest_addr: u32, data: *const u8, len: u32) -> i32 {
+pub(crate) fn esp_rom_spiflash_write(dest_addr: u32, data: *const u32, len: u32) -> i32 {
     maybe_with_critical_section(|| unsafe {
-        let esp_rom_spiflash_write: unsafe extern "C" fn(u32, *const u8, u32) -> i32 =
+        let esp_rom_spiflash_write: unsafe extern "C" fn(u32, *const u32, u32) -> i32 =
             core::mem::transmute(ESP_ROM_SPIFLASH_WRITE);
         esp_rom_spiflash_write(dest_addr, data, len)
     })

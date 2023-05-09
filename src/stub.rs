@@ -15,6 +15,6 @@ pub(crate) fn esp_rom_spiflash_erase_sector(_sector_number: u32) -> i32 {
     maybe_with_critical_section(|| unimplemented!())
 }
 
-pub(crate) fn esp_rom_spiflash_write(_dest_addr: u32, _data: *const u8, _len: u32) -> i32 {
+pub(crate) fn esp_rom_spiflash_write(_dest_addr: u32, _data: *const u32, _len: u32) -> i32 {
     maybe_with_critical_section(|| unimplemented!())
 }
