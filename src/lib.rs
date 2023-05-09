@@ -214,37 +214,4 @@ fn maybe_with_critical_section<R>(f: impl FnOnce() -> R) -> R {
 }
 
 #[cfg(feature = "low-level")]
-/// Low-level API
-///
-/// This gives you access to the underlying low level functionality.
-/// These operate on raw pointers and all functions here are unsafe.
-/// No pre-conditions are checked by any of these functions.
-pub mod ll {
-    pub unsafe fn spiflash_read(src_addr: u32, data: *const u32, len: u32) -> Result<(), i32> {
-        match crate::chip_specific::esp_rom_spiflash_read(src_addr, data, len) {
-            0 => Ok(()),
-            value => Err(value),
-        }
-    }
-
-    pub unsafe fn spiflash_unlock() -> Result<(), i32> {
-        match crate::chip_specific::esp_rom_spiflash_unlock() {
-            0 => Ok(()),
-            value => Err(value),
-        }
-    }
-
-    pub unsafe fn spiflash_erase_sector(sector_number: u32) -> Result<(), i32> {
-        match crate::chip_specific::esp_rom_spiflash_erase_sector(sector_number) {
-            0 => Ok(()),
-            value => Err(value),
-        }
-    }
-
-    pub unsafe fn spiflash_write(dest_addr: u32, data: *const u32, len: u32) -> Result<(), i32> {
-        match crate::chip_specific::esp_rom_spiflash_write(dest_addr, data, len) {
-            0 => Ok(()),
-            value => Err(value),
-        }
-    }
-}
+pub mod ll;
