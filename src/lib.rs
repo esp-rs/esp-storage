@@ -107,7 +107,7 @@ fn internal_write(
 
     let res = chip_specific::esp_rom_spiflash_write(
         offset,
-        bytes.as_ptr() as *const u8,
+        bytes.as_ptr() as *const u32,
         bytes.len() as u32,
     );
 
@@ -221,7 +221,7 @@ pub mod ll {
         }
     }
 
-    pub unsafe fn spiflash_write(dest_addr: u32, data: *const u8, len: u32) -> Result<(), i32> {
+    pub unsafe fn spiflash_write(dest_addr: u32, data: *const u32, len: u32) -> Result<(), i32> {
         match crate::chip_specific::esp_rom_spiflash_write(dest_addr, data, len) {
             0 => Ok(()),
             value => Err(value),

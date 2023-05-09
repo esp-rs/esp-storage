@@ -147,7 +147,7 @@ pub(crate) fn esp_rom_spiflash_erase_sector(sector_number: u32) -> i32 {
 
 #[inline(never)]
 #[link_section = ".rwtext"]
-pub(crate) fn esp_rom_spiflash_write(dest_addr: u32, data: *const u8, len: u32) -> i32 {
+pub(crate) fn esp_rom_spiflash_write(dest_addr: u32, data: *const u32, len: u32) -> i32 {
     maybe_with_critical_section(|| {
         spiflash_wait_for_ready();
         begin();
@@ -173,7 +173,7 @@ pub(crate) fn esp_rom_spiflash_write(dest_addr: u32, data: *const u8, len: u32) 
                 ((dest_addr + block) & 0xffffff) | block_len << 24,
             );
 
-            let data_ptr = unsafe { data.offset(block as isize) as *const u32 };
+            let data_ptr = unsafe { data.offset(block as isize) };
             for i in 0..block_len / 4 {
                 write_register(PERIPHS_SPI_FLASH_C0 + (4 * i), unsafe {
                     data_ptr.offset(i as isize).read_volatile()
