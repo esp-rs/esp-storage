@@ -24,6 +24,9 @@ use esp32c2_hal as hal;
 #[cfg(feature = "esp32c6")]
 use esp32c6_hal as hal;
 
+#[cfg(feature = "esp32h2")]
+use esp32h2_hal as hal;
+
 use hal::{clock::ClockControl, peripherals::Peripherals, prelude::*, timer::TimerGroup, Rtc};
 
 use esp_backtrace as _;

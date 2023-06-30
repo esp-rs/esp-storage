@@ -43,9 +43,9 @@ impl FlashStorage {
             unlocked: false,
         };
 
-        #[cfg(any(feature = "esp32c3", feature = "esp32s3"))]
+        #[cfg(any(feature = "esp32c3", feature = "esp32s3", feature = "esp32h2", feature = "esp32c6", feature = "esp32c2"))]
         const ADDR: u32 = 0x0000;
-        #[cfg(not(any(feature = "esp32c3", feature = "esp32s3")))]
+        #[cfg(not(any(feature = "esp32c3", feature = "esp32s3", feature = "esp32h2", feature = "esp32c6", feature = "esp32c2")))]
         const ADDR: u32 = 0x1000;
 
         let mut buffer = [0u8; 8];
