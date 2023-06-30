@@ -26,6 +26,8 @@ esp-println = { version = "0.4.0", features = [ "esp32c2" ] }
 esp-backtrace = { version = "0.6.0", features = [ "esp32c2", "panic-handler", "exception-handler", "print-uart"] }
 ```
 
+Similar changes are needed for the section `target.riscv32imc-unknown-none-elf.dev-dependencies` when running the demo for ESP32-H2.
+
 ## Important
 
 For ESP32 it is necessary to build with optimization level 2 or 3.
