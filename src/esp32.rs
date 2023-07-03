@@ -163,17 +163,13 @@ pub(crate) fn esp_rom_spiflash_write(dest_addr: u32, data: *const u32, len: u32)
             spiflash_wait_for_ready();
             spi_write_enable();
 
-            let block_len = if (len - block) % 32 == 0 {
-                32
-            } else {
-                (len - block) % 32
-            };
+            let block_len = if len - block < 32 { len - block } else { 32 };
             write_register(
                 PERIPHS_SPI_FLASH_ADDR,
                 ((dest_addr + block) & 0xffffff) | block_len << 24,
             );
 
-            let data_ptr = unsafe { data.offset(block as isize) };
+            let data_ptr = unsafe { data.offset((block / 4) as isize) };
             for i in 0..block_len / 4 {
                 write_register(PERIPHS_SPI_FLASH_C0 + (4 * i), unsafe {
                     data_ptr.offset(i as isize).read_volatile()
