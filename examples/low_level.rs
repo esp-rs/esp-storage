@@ -39,12 +39,9 @@ fn main() -> ! {
     #[cfg(any(feature = "esp32", feature = "esp32s2", feature = "esp32s3"))]
     {
         #[cfg(feature = "esp32")]
-        let mut system = peripherals.DPORT.split();
+        let system = peripherals.DPORT.split();
         #[cfg(not(feature = "esp32"))]
-        let mut system = peripherals.SYSTEM.split();
-
-        let mut clock_control = system.peripheral_clock_control;
-
+        let system = peripherals.SYSTEM.split();
         let mut clock_control = system.peripheral_clock_control;
 
         let clocks = ClockControl::boot_defaults(system.clock_control).freeze();
