@@ -4,19 +4,28 @@ This implements [`embedded-storage`](https://github.com/rust-embedded-community/
 
 ## Current support
 
-ESP32, ESP32-S2, ESP32-S3, ESP32-C2, ESP32-C3, and ESP32-C6 are supported in `esp-storage`
+ESP32, ESP32-C2, ESP32-C3, ESP32-C6, ESP32-H2, ESP32-S2 and ESP32-S3 are supported in `esp-storage`
 
 ## Run examples
+- ESP32:
+  1. `cargo "+esp" run --example demo --features esp32 --target xtensa-esp32-none-elf --release`
+- ESP32-C2:
+  1. Uncomment the ESP32-C2 section, under `target.riscv32imc-unknown-none-elf.dev-dependencies` of the `Cargo-toml` file.
+  2. `cargo "+nightly" run --example demo --features esp32c2 --target riscv32imc-unknown-none-elf`
+- ESP32-C3:
+  1. Uncomment the ESP32-C3 section, under `target.riscv32imc-unknown-none-elf.dev-dependencies` of the `Cargo-toml` file.
+  2. `cargo "+nightly" run --example demo --features esp32c3 --target riscv32imc-unknown-none-elf`
+- ESP32-C6:
+  1. Uncomment the ESP32-C6 section, under `target.riscv32imac-unknown-none-elf.dev-dependencies` of the `Cargo-toml` file.
+  2. `cargo "+nightly" run --example demo --features esp32c6 --target riscv32imac-unknown-none-elf`
+- ESP32-H2:
+  1. Uncomment the ESP32-H2 section, under `target.riscv32imac-unknown-none-elf.dev-dependencies` of the `Cargo-toml` file.
+  2. `cargo "+nightly" run --example demo --features esp32h2 --target riscv32imac-unknown-none-elf`
+- ESP32-S2:
+  1. `cargo "+esp" run --example demo --features esp32s2 --target xtensa-esp32s2-none-elf`
+- ESP32-S3:
+  1. `cargo "+esp" run --example demo --features esp32s3 --target xtensa-esp32s3-none-elf`
 
-`cargo "+esp" run --example demo --features esp32 --target xtensa-esp32-none-elf --release`
-
-`cargo "+esp" run --example demo --features esp32s2 --target xtensa-esp32s2-none-elf`
-
-`cargo "+esp" run --example demo --features esp32s3 --target xtensa-esp32s3-none-elf`
-
-`cargo "+nightly" run --example demo --features esp32c3 --target riscv32imc-unknown-none-elf`
-
-`cargo "+nightly" run --example demo --features esp32c6 --target riscv32imac-unknown-none-elf`
 
 To run the example for ESP32-C2 you need to modify `Cargo-toml`, section `target.riscv32imc-unknown-none-elf.dev-dependencies` like this:
 
