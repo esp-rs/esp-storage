@@ -39,13 +39,13 @@ esp-backtrace = { version = "0.7.0", features = [ "esp32c3", "panic-handler", "e
 
 [target.riscv32imac-unknown-none-elf.dev-dependencies]
 # ESP32-C6
-# esp32c6-hal = "0.3.0"
-# esp-println = { version = "0.5.0", features = [ "esp32c6" ] }
-# esp-backtrace = { version = "0.7.0", features = [ "esp32c6", "panic-handler", "exception-handler", "print-uart"] }
+esp32c6-hal = "0.3.0"
+esp-println = { version = "0.5.0", features = [ "esp32c6" ] }
+esp-backtrace = { version = "0.7.0", features = [ "esp32c6", "panic-handler", "exception-handler", "print-uart"] }
 # ESP32-H2
-esp32h2-hal = "0.1.0"
-esp-println = { version = "0.5.0", features = [ "esp32h2" ] }
-esp-backtrace = { version = "0.7.0", features = [ "esp32h2", "panic-handler", "exception-handler", "print-uart"] }
+# esp32h2-hal = "0.1.0"
+# esp-println = { version = "0.5.0", features = [ "esp32h2" ] }
+# esp-backtrace = { version = "0.7.0", features = [ "esp32h2", "panic-handler", "exception-handler", "print-uart"] }
 
 [target.xtensa-esp32-none-elf.dev-dependencies]
 esp32-hal = "0.13.0"
