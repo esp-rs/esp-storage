@@ -1,6 +1,6 @@
 [package]
 name = "esp-storage"
-version = "0.1.0"
+version = "0.2.0"
 edition = "2021"
 authors = [
     "The ESP-RS team",
@@ -28,29 +28,29 @@ critical-section = { version =  "1.0.1", optional = true }
 # specifying dev dependencies by target is less than ideal - however we cannot have feature gated dev-dependencies
 
 [target.riscv32imc-unknown-none-elf.dev-dependencies]
-esp32c3-hal = { version = "0.7.0" }
-esp-println = { version = "0.4.0", features = [ "esp32c3" ] }
+esp32c3-hal = { version = "0.9.0" }
+esp-println = { version = "0.5.0", features = [ "esp32c3" ] }
 esp-backtrace = { version = "0.6.0", features = [ "esp32c3", "panic-handler", "exception-handler", "print-uart"] }
 
 [target.riscv32imac-unknown-none-elf.dev-dependencies]
-esp32c6-hal = { git = "https://github.com/esp-rs/esp-hal", package = "esp32c6-hal", rev = "7cf7d8eeac9172b24f0fba7ae659ec39925ce04f" }
-esp-println = { version = "0.4.0", features = [ "esp32c6" ] }
+esp32c6-hal = { version = "0.2.0" }
+esp-println = { version = "0.5.0", features = [ "esp32c6" ] }
 esp-backtrace = { version = "0.6.0", features = [ "esp32c6", "panic-handler", "exception-handler", "print-uart"] }
 
 
 [target.xtensa-esp32-none-elf.dev-dependencies]
-esp32-hal = { version = "0.10.0" }
-esp-println = { version = "0.4.0", features = [ "esp32" ] }
+esp32-hal = { version = "0.12.0" }
+esp-println = { version = "0.5.0", features = [ "esp32" ] }
 esp-backtrace = { version = "0.6.0", features = [ "esp32", "panic-handler", "exception-handler", "print-uart"] }
 
 [target.xtensa-esp32s2-none-elf.dev-dependencies]
-esp32s2-hal = { version = "0.7.0" }
-esp-println = { version = "0.4.0", features = [ "esp32s2" ] }
+esp32s2-hal = { version = "0.9.0" }
+esp-println = { version = "0.5.0", features = [ "esp32s2" ] }
 esp-backtrace = { version = "0.6.0", features = [ "esp32s2", "panic-handler", "exception-handler", "print-uart"] }
 
 [target.xtensa-esp32s3-none-elf.dev-dependencies]
-esp32s3-hal = { version = "0.7.0" }
-esp-println = { version = "0.4.0", features = [ "esp32s3" ] }
+esp32s3-hal = { version = "0.9.0" }
+esp-println = { version = "0.5.0", features = [ "esp32s3" ] }
 esp-backtrace = { version = "0.6.0", features = [ "esp32s3", "panic-handler", "exception-handler", "print-uart"] }
 
 [[example]]
