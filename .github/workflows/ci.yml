@@ -43,7 +43,7 @@ jobs:
       - name: check (esp32c3)
         run: cargo +nightly check --features=esp32c3
       - name: check (esp32c6)
-        run: ccargo +nightly check --features=esp32c6
+        run: cargo +nightly check --features=esp32c6
       - name: check (esp32h2)
         run: cargo +nightly check --features=esp32h2
       # Check all Xtensa targets:
@@ -142,7 +142,7 @@ jobs:
   # --------------------------------------------------------------------------
   # Lint
 
-  clippy-riscv:
+  clippy:
     runs-on: ubuntu-latest
 
     steps:
@@ -168,7 +168,7 @@ jobs:
         run: cargo +nightly clippy --features esp32h2 -- --no-deps
       # Run clippy on Xtensa.
       - name: clippy (esp32)
-        run: cargo +esp clippy --features esp32 -- --no-deps
+        run: cargo +esp clippy --release --features esp32 -- --no-deps
       - name: clippy (esp32s2)
         run: cargo +esp clippy --features esp32s2 -- --no-deps
       - name: clippy (esp32s3)
