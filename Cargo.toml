@@ -23,35 +23,44 @@ categories = [
 
 [dependencies]
 embedded-storage = "0.3.0"
-critical-section = { version =  "1.0.1", optional = true }
+critical-section = { version =  "1.1.1", optional = true }
 
 # specifying dev dependencies by target is less than ideal - however we cannot have feature gated dev-dependencies
 
 [target.riscv32imc-unknown-none-elf.dev-dependencies]
-esp32c3-hal = { version = "0.9.0" }
+# ESP32-C2
+# esp32c2-hal = "0.8.0"
+# esp-println = { version = "0.5.0", features = [ "esp32c2" ] }
+# esp-backtrace = { version = "0.7.0", features = [ "esp32c2", "panic-handler", "exception-handler", "print-uart"] }
+# ESP32-C3
+esp32c3-hal = "0.10.0"
 esp-println = { version = "0.5.0", features = [ "esp32c3" ] }
-esp-backtrace = { version = "0.6.0", features = [ "esp32c3", "panic-handler", "exception-handler", "print-uart"] }
+esp-backtrace = { version = "0.7.0", features = [ "esp32c3", "panic-handler", "exception-handler", "print-uart"] }
 
 [target.riscv32imac-unknown-none-elf.dev-dependencies]
-esp32c6-hal = { version = "0.2.0" }
+# ESP32-C6
+esp32c6-hal = "0.3.0"
 esp-println = { version = "0.5.0", features = [ "esp32c6" ] }
-esp-backtrace = { version = "0.6.0", features = [ "esp32c6", "panic-handler", "exception-handler", "print-uart"] }
-
+esp-backtrace = { version = "0.7.0", features = [ "esp32c6", "panic-handler", "exception-handler", "print-uart"] }
+# ESP32-H2
+# esp32h2-hal = "0.1.0"
+# esp-println = { version = "0.5.0", features = [ "esp32h2" ] }
+# esp-backtrace = { version = "0.7.0", features = [ "esp32h2", "panic-handler", "exception-handler", "print-uart"] }
 
 [target.xtensa-esp32-none-elf.dev-dependencies]
-esp32-hal = { version = "0.12.0" }
+esp32-hal = "0.13.0"
 esp-println = { version = "0.5.0", features = [ "esp32" ] }
-esp-backtrace = { version = "0.6.0", features = [ "esp32", "panic-handler", "exception-handler", "print-uart"] }
+esp-backtrace = { version = "0.7.0", features = [ "esp32", "panic-handler", "exception-handler", "print-uart"] }
 
 [target.xtensa-esp32s2-none-elf.dev-dependencies]
-esp32s2-hal = { version = "0.9.0" }
+esp32s2-hal = "0.10.0"
 esp-println = { version = "0.5.0", features = [ "esp32s2" ] }
-esp-backtrace = { version = "0.6.0", features = [ "esp32s2", "panic-handler", "exception-handler", "print-uart"] }
+esp-backtrace = { version = "0.7.0", features = [ "esp32s2", "panic-handler", "exception-handler", "print-uart"] }
 
 [target.xtensa-esp32s3-none-elf.dev-dependencies]
-esp32s3-hal = { version = "0.9.0" }
+esp32s3-hal = "0.10.0"
 esp-println = { version = "0.5.0", features = [ "esp32s3" ] }
-esp-backtrace = { version = "0.6.0", features = [ "esp32s3", "panic-handler", "exception-handler", "print-uart"] }
+esp-backtrace = { version = "0.7.0", features = [ "esp32s3", "panic-handler", "exception-handler", "print-uart"] }
 
 [[example]]
 name              = "low_level"

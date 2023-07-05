@@ -76,6 +76,12 @@ impl FlashStorage {
     }
 }
 
+impl Default for FlashStorage {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 #[inline(never)]
 #[link_section = ".rwtext"]
 fn internal_read(offset: u32, bytes: &mut [u8]) -> Result<(), FlashStorageError> {
