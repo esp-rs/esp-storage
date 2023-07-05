@@ -1,0 +1,191 @@
+name: CI
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+  workflow_dispatch:
+
+env:
+  CARGO_TERM_COLOR: always
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+# Cancel any currently running workflows from the same PR, branch, or
+# tag when a new workflow is triggered.
+#
+# https://stackoverflow.com/a/66336834
+concurrency:
+  cancel-in-progress: true
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+
+jobs:
+  # --------------------------------------------------------------------------
+  # Check
+
+  lib-check:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: dtolnay/rust-toolchain@v1
+        with:
+          target: riscv32imc-unknown-none-elf
+          toolchain: nightly
+          components: rust-src
+      - uses: esp-rs/xtensa-toolchain@v1.5
+        with:
+          ldproxy: false
+          override: false
+      - uses: Swatinem/rust-cache@v2
+
+      # Check all RISC-V targets:
+      - name: check (esp32c3)
+        run: cargo +nightly check --features=esp32c3
+      - name: check (esp32c6)
+        run: ccargo +nightly check --features=esp32c6
+      - name: check (esp32h2)
+        run: cargo +nightly check --features=esp32h2
+      # Check all Xtensa targets:
+      - name: check (esp32)
+        run: cargo +esp check --release --features=esp32
+      - name: check (esp32s2)
+        run: cargo +esp check --features=esp32s2
+      - name: check (esp32s3)
+        run: cargo +esp check --features=esp32s3
+
+  esp32-examples:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: esp-rs/xtensa-toolchain@v1.5
+        with:
+          default: true
+          buildtargets: esp32
+          ldproxy: false
+      - uses: Swatinem/rust-cache@v1
+
+      - name: build (demo)
+        run: cargo +esp build --release --example demo --features "esp32" --target xtensa-esp32-none-elf
+      - name: build (low_level)
+        run: cargo +esp build --release --example low_level --features "esp32,low-level" --target xtensa-esp32-none-elf
+
+  esp32c3-examples:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: dtolnay/rust-toolchain@v1
+        with:
+          target: riscv32imc-unknown-none-elf
+          toolchain: nightly
+          components: rust-src
+      - uses: Swatinem/rust-cache@v1
+
+      - name: build (demo)
+        run: cargo +nightly build --example demo --features "esp32c3" --target riscv32imc-unknown-none-elf
+      - name: build (low_level)
+        run: cargo +nightly build --example low_level --features "esp32c3,low-level" --target riscv32imc-unknown-none-elf
+
+  esp32c6-examples:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: dtolnay/rust-toolchain@v1
+        with:
+          target: riscv32imac-unknown-none-elf
+          toolchain: nightly
+          components: rust-src
+      - uses: Swatinem/rust-cache@v1
+
+      - name: check (lib)
+        run: cargo +nightly check --features=esp32c6
+      - name: build (demo)
+        run: cargo +nightly build --example demo --features "esp32c6" --target riscv32imac-unknown-none-elf
+      - name: build (low_level)
+        run: cargo +nightly build --example low_level --features "esp32c6,low-level" --target riscv32imac-unknown-none-elf
+
+  esp32s2-examples:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: esp-rs/xtensa-toolchain@v1.5
+        with:
+          default: true
+          buildtargets: esp32s2
+          ldproxy: false
+      - uses: Swatinem/rust-cache@v1
+
+      - name: build (demo)
+        run: cargo +esp build --example demo --features "esp32s2" --target xtensa-esp32s2-none-elf
+      - name: build (low_level)
+        run: cargo +esp build --example low_level --features "esp32s2,low-level" --target xtensa-esp32s2-none-elf
+
+  esp32s3-examples:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: esp-rs/xtensa-toolchain@v1.5
+        with:
+          default: true
+          buildtargets: esp32s3
+          ldproxy: false
+      - uses: Swatinem/rust-cache@v1
+
+      - name: build (demo)
+        run: cargo +esp build --example demo --features "esp32s3" --target xtensa-esp32s3-none-elf
+      - name: build (low_level)
+        run: cargo +esp build --example low_level --features "esp32s3,low-level" --target xtensa-esp32s3-none-elf
+
+  # --------------------------------------------------------------------------
+  # Lint
+
+  clippy-riscv:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: dtolnay/rust-toolchain@v1
+        with:
+          toolchain: nightly
+          components: clippy
+      - uses: esp-rs/xtensa-toolchain@v1.5
+        with:
+          ldproxy: false
+          override: false
+      - uses: Swatinem/rust-cache@v2
+
+      # Run clippy on RISC-V.
+      - name: clippy (esp32c2)
+        run: cargo +nightly clippy --features esp32c2 -- --no-deps
+      - name: clippy (esp32c3)
+        run: cargo +nightly clippy --features esp32c3 -- --no-deps
+      - name: clippy (esp32c6)
+        run: cargo +nightly clippy --features esp32c6 -- --no-deps
+      - name: clippy (esp32h2)
+        run: cargo +nightly clippy --features esp32h2 -- --no-deps
+      # Run clippy on Xtensa.
+      - name: clippy (esp32)
+        run: cargo +esp clippy --features esp32 -- --no-deps
+      - name: clippy (esp32s2)
+        run: cargo +esp clippy --features esp32s2 -- --no-deps
+      - name: clippy (esp32s3)
+        run: cargo +esp clippy --features esp32s3 -- --no-deps
+
+  rustfmt:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: dtolnay/rust-toolchain@v1
+        with:
+          toolchain: nightly
+          components: rustfmt
+      - uses: Swatinem/rust-cache@v2
+
+      # Check the formatting.
+      - name: rustfmt
+        run: cargo fmt --all -- --check
