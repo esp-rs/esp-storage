@@ -15,6 +15,7 @@ const SPI_EXT2_REG: u32 = SPI_BASE_REG + 0xF8;
 const SPI0_EXT2_REG: u32 = SPI0_BASE_REG + 0xF8;
 const SPI_RD_STATUS_REG: u32 = SPI_BASE_REG + 0x10;
 const SPI_ST: u32 = 0x7;
+#[allow(clippy::identity_op)]
 const SPI_CMD_REG: u32 = SPI_BASE_REG + 0x00;
 const SPI_USER_REG: u32 = SPI_BASE_REG + 0x1c;
 const SPI_USER1_REG: u32 = SPI_BASE_REG + 0x20;

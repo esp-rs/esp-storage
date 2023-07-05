@@ -159,20 +159,20 @@ jobs:
 
       # Run clippy on RISC-V.
       - name: clippy (esp32c2)
-        run: cargo +nightly clippy --features esp32c2 -- --no-deps
+        run: cargo +nightly clippy --features esp32c2 -- --no-deps -D warnings
       - name: clippy (esp32c3)
-        run: cargo +nightly clippy --features esp32c3 -- --no-deps
+        run: cargo +nightly clippy --features esp32c3 -- --no-deps -D warnings
       - name: clippy (esp32c6)
-        run: cargo +nightly clippy --features esp32c6 -- --no-deps
+        run: cargo +nightly clippy --features esp32c6 -- --no-deps -D warnings
       - name: clippy (esp32h2)
-        run: cargo +nightly clippy --features esp32h2 -- --no-deps
+        run: cargo +nightly clippy --features esp32h2 -- --no-deps -D warnings
       # Run clippy on Xtensa.
       - name: clippy (esp32)
-        run: cargo +esp clippy --release --features esp32 -- --no-deps
+        run: cargo +esp clippy --release --features esp32 -- --no-deps -D warnings
       - name: clippy (esp32s2)
-        run: cargo +esp clippy --features esp32s2 -- --no-deps
+        run: cargo +esp clippy --features esp32s2 -- --no-deps -D warnings
       - name: clippy (esp32s3)
-        run: cargo +esp clippy --features esp32s3 -- --no-deps
+        run: cargo +esp clippy --features esp32s3 -- --no-deps -D warnings
 
   rustfmt:
     runs-on: ubuntu-latest
