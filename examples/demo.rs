@@ -41,13 +41,11 @@ fn main() -> ! {
         #[cfg(not(feature = "esp32"))]
         let mut system = peripherals.SYSTEM.split();
 
+        let mut clock_control = system.peripheral_clock_control;
+
         let clocks = ClockControl::boot_defaults(system.clock_control).freeze();
 
-        let timer_group0 = TimerGroup::new(
-            peripherals.TIMG0,
-            &clocks,
-            &mut system.peripheral_clock_control,
-        );
+        let timer_group0 = TimerGroup::new(peripherals.TIMG0, &clocks, &mut clock_control);
         let mut wdt = timer_group0.wdt;
         let mut rtc = Rtc::new(peripherals.RTC_CNTL);
 
@@ -60,21 +58,14 @@ fn main() -> ! {
     {
         let mut system = peripherals.SYSTEM.split();
         let clocks = ClockControl::boot_defaults(system.clock_control).freeze();
+        let mut clock_control = system.peripheral_clock_control;
 
         let mut rtc = Rtc::new(peripherals.RTC_CNTL);
-        let timer_group0 = TimerGroup::new(
-            peripherals.TIMG0,
-            &clocks,
-            &mut system.peripheral_clock_control,
-        );
+        let timer_group0 = TimerGroup::new(peripherals.TIMG0, &clocks, &mut clock_control);
         let mut wdt0 = timer_group0.wdt;
 
         #[cfg(not(feature = "esp32c2"))]
-        let timer_group1 = TimerGroup::new(
-            peripherals.TIMG1,
-            &clocks,
-            &mut system.peripheral_clock_control,
-        );
+        let timer_group1 = TimerGroup::new(peripherals.TIMG1, &clocks, &mut clock_control);
         #[cfg(not(feature = "esp32c2"))]
         let mut wdt1 = timer_group1.wdt;
 
@@ -89,20 +80,15 @@ fn main() -> ! {
     {
         let mut system = peripherals.PCR.split();
         let clocks = ClockControl::boot_defaults(system.clock_control).freeze();
+        let mut clock_control = system.peripheral_clock_control;
 
         let mut rtc = Rtc::new(peripherals.LP_CLKRST);
-        let timer_group0 = TimerGroup::new(
-            peripherals.TIMG0,
-            &clocks,
-            &mut system.peripheral_clock_control,
-        );
+        let timer_group0 = TimerGroup::new(peripherals.TIMG0, &clocks, &mut clock_control);
         let mut wdt0 = timer_group0.wdt;
 
-        let timer_group1 = TimerGroup::new(
-            peripherals.TIMG1,
-            &clocks,
-            &mut system.peripheral_clock_control,
-        );
+        #[cfg(not(feature = "esp32c2"))]
+        let timer_group1 = TimerGroup::new(peripherals.TIMG1, &clocks, &mut clock_control);
+        #[cfg(not(feature = "esp32c2"))]
         let mut wdt1 = timer_group1.wdt;
 
         rtc.swd.disable();

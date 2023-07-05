@@ -1,6 +1,6 @@
 [package]
 name = "esp-storage"
-version = "0.1.0"
+version = "0.2.0"
 edition = "2021"
 authors = [
     "The ESP-RS team",
@@ -55,7 +55,7 @@ esp-backtrace = { version = "0.7.0", features = [ "esp32", "panic-handler", "exc
 [target.xtensa-esp32s2-none-elf.dev-dependencies]
 esp32s2-hal = "0.10.0"
 esp-println = { version = "0.5.0", features = [ "esp32s2" ] }
-esp-backtrace = { version = "0.6.0", features = [ "esp32s2", "panic-handler", "exception-handler", "print-uart"] }
+esp-backtrace = { version = "0.7.0", features = [ "esp32s2", "panic-handler", "exception-handler", "print-uart"] }
 
 [target.xtensa-esp32s3-none-elf.dev-dependencies]
 esp32s3-hal = "0.10.0"
