@@ -86,9 +86,7 @@ fn main() -> ! {
         let timer_group0 = TimerGroup::new(peripherals.TIMG0, &clocks, &mut clock_control);
         let mut wdt0 = timer_group0.wdt;
 
-        #[cfg(not(feature = "esp32c2"))]
         let timer_group1 = TimerGroup::new(peripherals.TIMG1, &clocks, &mut clock_control);
-        #[cfg(not(feature = "esp32c2"))]
         let mut wdt1 = timer_group1.wdt;
 
         rtc.swd.disable();
