@@ -45,6 +45,8 @@ fn main() -> ! {
 
         let mut clock_control = system.peripheral_clock_control;
 
+        let mut clock_control = system.peripheral_clock_control;
+
         let clocks = ClockControl::boot_defaults(system.clock_control).freeze();
 
         let timer_group0 = TimerGroup::new(peripherals.TIMG0, &clocks, &mut clock_control);
