@@ -73,24 +73,29 @@ fn main() -> ! {
         wdt1.disable();
     }
 
-    #[cfg(any(feature = "esp32c6"))]
+    #[cfg(any(feature = "esp32c6", feature = "esp32h2"))]
     {
-        let system = peripherals.PCR.split();
+        let mut system = peripherals.PCR.split();
         let clocks = ClockControl::boot_defaults(system.clock_control).freeze();
 
         let mut rtc = Rtc::new(peripherals.LP_CLKRST);
-        let timer_group0 = TimerGroup::new(peripherals.TIMG0, &clocks);
+        let timer_group0 = TimerGroup::new(
+            peripherals.TIMG0,
+            &clocks,
+            &mut system.peripheral_clock_control,
+        );
         let mut wdt0 = timer_group0.wdt;
 
-        #[cfg(not(feature = "esp32c2"))]
-        let timer_group1 = TimerGroup::new(peripherals.TIMG1, &clocks);
-        #[cfg(not(feature = "esp32c2"))]
+        let timer_group1 = TimerGroup::new(
+            peripherals.TIMG1,
+            &clocks,
+            &mut system.peripheral_clock_control,
+        );
         let mut wdt1 = timer_group1.wdt;
 
         rtc.swd.disable();
         rtc.rwdt.disable();
         wdt0.disable();
-        #[cfg(not(feature = "esp32c2"))]
         wdt1.disable();
     }
 
