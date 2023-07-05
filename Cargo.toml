@@ -28,14 +28,14 @@ critical-section = { version =  "1.1.1", optional = true }
 # specifying dev dependencies by target is less than ideal - however we cannot have feature gated dev-dependencies
 
 [target.riscv32imc-unknown-none-elf.dev-dependencies]
-# ESP32-C3
-esp32c3-hal = "0.10.0"
-esp-println = { version = "0.5.0", features = [ "esp32c3" ] }
-esp-backtrace = { version = "0.7.0", features = [ "esp32c3", "panic-handler", "exception-handler", "print-uart"] }
 # ESP32-C2
 # esp32c2-hal = "0.8.0"
 # esp-println = { version = "0.5.0", features = [ "esp32c2" ] }
 # esp-backtrace = { version = "0.7.0", features = [ "esp32c2", "panic-handler", "exception-handler", "print-uart"] }
+# ESP32-C3
+esp32c3-hal = "0.10.0"
+esp-println = { version = "0.5.0", features = [ "esp32c3" ] }
+esp-backtrace = { version = "0.7.0", features = [ "esp32c3", "panic-handler", "exception-handler", "print-uart"] }
 
 [target.riscv32imac-unknown-none-elf.dev-dependencies]
 # ESP32-C6
