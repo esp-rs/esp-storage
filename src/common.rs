@@ -106,6 +106,7 @@ impl FlashStorage {
         Ok(())
     }
 
+    #[allow(clippy::all)]
     #[inline(never)]
     #[link_section = ".rwtext"]
     pub(crate) fn internal_read(
