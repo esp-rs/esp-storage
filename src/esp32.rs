@@ -277,6 +277,7 @@ pub(crate) fn esp_rom_spiflash_unlock() -> i32 {
     })
 }
 
+#[allow(clippy::identity_op)]
 pub fn park_other_core() -> bool {
     const SW_CPU_STALL: u32 = 0x3ff480ac;
     const OPTIONS0: u32 = 0x3ff48000;
@@ -305,6 +306,7 @@ pub fn park_other_core() -> bool {
     other_was_running
 }
 
+#[allow(clippy::identity_op)]
 pub fn unpark_other_core(enable: bool) {
     if enable {
         const SW_CPU_STALL: u32 = 0x3ff480ac;

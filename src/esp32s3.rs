@@ -47,6 +47,7 @@ pub(crate) fn esp_rom_spiflash_write(dest_addr: u32, data: *const u32, len: u32)
     })
 }
 
+#[allow(clippy::identity_op)]
 pub fn park_other_core() -> bool {
     const SW_CPU_STALL: u32 = 0x600080bc;
     const OPTIONS0: u32 = 0x60008000;
@@ -75,6 +76,7 @@ pub fn park_other_core() -> bool {
     other_was_running
 }
 
+#[allow(clippy::identity_op)]
 pub fn unpark_other_core(enable: bool) {
     if enable {
         const SW_CPU_STALL: u32 = 0x600080bc;
