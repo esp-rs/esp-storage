@@ -67,7 +67,7 @@ name              = "low_level"
 required-features = ["low-level"]
 
 [features]
-default = ["critical-section", "storage"]
+default = ["critical-section", "multicore-aware", "storage"]
 critical-section = ["dep:critical-section"]
 # ReadStorage/Storage traits
 storage = []
@@ -84,6 +84,8 @@ esp32s2 = []
 esp32s3 = []
 # Enable flash emulation to run tests
 emulation = []
+# Park the other core on multicore targets
+multicore-aware = []
 
 # this feature is reserved for very specific use-cases - usually you don't want to use this!
 low-level = []

@@ -1,12 +1,33 @@
-{
-    // "editor.formatOnSave": true,
 
-    "rust-analyzer.server.extraEnv": {
-        "CARGO_TARGET_DIR": "./target_ra"
-    },
-
-    "rust-analyzer.cargo.features": [
-        "esp32","low-level"
-    ],
-    "rust-analyzer.cargo.target": "xtensa-esp32-none-elf",
-}
+    {
+        "rust-analyzer.cargo.features": [
+            "esp32"
+        ],
+        "rust-analyzer.check.overrideCommand": [
+            "cargo",
+            "check",
+            "--examples",
+            "--bins",
+            "--lib",            
+            "--message-format=json",
+            "--no-default-features",
+            "--features",
+            "esp32",
+        ],
+        "rust-analyzer.check.allTargets": false,
+        "rust-analyzer.cargo.buildScripts.invocationLocation": "root",
+        "rust-analyzer.check.invocationLocation": "root",
+        "rust-analyzer.cargo.buildScripts.overrideCommand": [
+            "cargo",
+            "check",
+            "--examples",
+            "--bins",
+            "--lib",            
+            "--message-format=json",
+            "--no-default-features",
+            "--features",
+            "esp32",
+        ],
+        "rust-analyzer.showUnlinkedFileNotification": false,
+    }     
+    

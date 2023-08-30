@@ -1,4 +1,5 @@
 #![cfg_attr(not(all(test, feature = "emulation")), no_std)]
+#![cfg_attr(target_arch = "xtensa", feature(asm_experimental_arch))]
 
 #[cfg(not(feature = "emulation"))]
 #[cfg_attr(feature = "esp32c2", path = "esp32c2.rs")]
@@ -48,11 +49,19 @@ pub mod ll;
 #[inline(always)]
 #[link_section = ".rwtext"]
 fn maybe_with_critical_section<R>(f: impl FnOnce() -> R) -> R {
+    #[cfg(feature = "multicore-aware")]
+    let was_running = chip_specific::park_other_core();
+
     #[cfg(feature = "critical-section")]
-    return critical_section::with(|_| f());
+    let res = critical_section::with(|_| f());
 
     #[cfg(not(feature = "critical-section"))]
-    f()
+    let res = f();
+
+    #[cfg(feature = "multicore-aware")]
+    chip_specific::unpark_other_core(was_running);
+
+    res
 }
 
 #[cfg(feature = "emulation")]
