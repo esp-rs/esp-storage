@@ -23,7 +23,7 @@ use esp32c6_hal as hal;
 #[cfg(feature = "esp32h2")]
 use esp32h2_hal as hal;
 
-use hal::{clock::ClockControl, peripherals::Peripherals, prelude::*, timer::TimerGroup, Rtc};
+use hal::prelude::*;
 
 use esp_storage::FlashStorage;
 
@@ -32,8 +32,6 @@ use esp_println::println;
 
 #[entry]
 fn main() -> ! {
-    let peripherals = Peripherals::take();
-
     let mut bytes = [0u8; 32];
 
     let mut flash = FlashStorage::new();
