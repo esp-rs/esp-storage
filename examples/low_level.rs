@@ -27,75 +27,13 @@ use esp32c6_hal as hal;
 #[cfg(feature = "esp32h2")]
 use esp32h2_hal as hal;
 
-use hal::{clock::ClockControl, peripherals::Peripherals, prelude::*, timer::TimerGroup, Rtc};
+use hal::prelude::*;
 
 use esp_backtrace as _;
 use esp_println::println;
 
 #[entry]
 fn main() -> ! {
-    let peripherals = Peripherals::take();
-
-    #[cfg(any(feature = "esp32", feature = "esp32s2", feature = "esp32s3"))]
-    {
-        #[cfg(feature = "esp32")]
-        let system = peripherals.DPORT.split();
-        #[cfg(not(feature = "esp32"))]
-        let system = peripherals.SYSTEM.split();
-        let mut clock_control = system.peripheral_clock_control;
-
-        let clocks = ClockControl::boot_defaults(system.clock_control).freeze();
-
-        let timer_group0 = TimerGroup::new(peripherals.TIMG0, &clocks, &mut clock_control);
-        let mut wdt = timer_group0.wdt;
-        let mut rtc = Rtc::new(peripherals.RTC_CNTL);
-
-        // Disable MWDT and RWDT (Watchdog) flash boot protection
-        wdt.disable();
-        rtc.rwdt.disable();
-    }
-
-    #[cfg(any(feature = "esp32c3", feature = "esp32c2"))]
-    {
-        let mut system = peripherals.SYSTEM.split();
-        let clocks = ClockControl::boot_defaults(system.clock_control).freeze();
-        let mut clock_control = system.peripheral_clock_control;
-
-        let mut rtc = Rtc::new(peripherals.RTC_CNTL);
-        let timer_group0 = TimerGroup::new(peripherals.TIMG0, &clocks, &mut clock_control);
-        let mut wdt0 = timer_group0.wdt;
-
-        #[cfg(not(feature = "esp32c2"))]
-        let timer_group1 = TimerGroup::new(peripherals.TIMG1, &clocks, &mut clock_control);
-        #[cfg(not(feature = "esp32c2"))]
-        let mut wdt1 = timer_group1.wdt;
-
-        rtc.swd.disable();
-        rtc.rwdt.disable();
-        wdt0.disable();
-        #[cfg(not(feature = "esp32c2"))]
-        wdt1.disable();
-    }
-
-    #[cfg(any(feature = "esp32c6", feature = "esp32h2"))]
-    {
-        let mut system = peripherals.PCR.split();
-        let clocks = ClockControl::boot_defaults(system.clock_control).freeze();
-        let mut clock_control = system.peripheral_clock_control;
-
-        let mut rtc = Rtc::new(peripherals.LP_CLKRST);
-        let timer_group0 = TimerGroup::new(peripherals.TIMG0, &clocks, &mut clock_control);
-        let mut wdt0 = timer_group0.wdt;
-
-        let timer_group1 = TimerGroup::new(peripherals.TIMG1, &clocks, &mut clock_control);
-        let mut wdt1 = timer_group1.wdt;
-
-        rtc.swd.disable();
-        rtc.rwdt.disable();
-        wdt0.disable();
-        wdt1.disable();
-    }
-
     let mut bytes = [0u8; 48];
     let flash_addr = 0x9000;
 
