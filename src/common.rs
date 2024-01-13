@@ -155,4 +155,8 @@ impl FlashStorage {
             bytes.len() as u32,
         ))
     }
+
+    pub fn capacity(&self) -> usize {
+        self.capacity;
+    }
 }
