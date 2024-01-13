@@ -157,6 +157,6 @@ impl FlashStorage {
     }
 
     pub fn capacity(&self) -> usize {
-        self.capacity;
+        self.capacity
     }
 }
