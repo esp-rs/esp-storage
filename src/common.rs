@@ -1,8 +1,9 @@
 use crate::chip_specific;
 use core::ops::{Deref, DerefMut};
 
-#[repr(align(4))]
+#[repr(C, align(4))]
 pub struct FlashSectorBuffer {
+    // NOTE: Ensure that no unaligned fields are added above `data` to maintain its required alignment
     data: [u8; FlashStorage::SECTOR_SIZE as usize],
 }
 
