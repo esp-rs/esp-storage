@@ -7,8 +7,9 @@ use embedded_storage::nor_flash::{
     ErrorType, NorFlash, NorFlashError, NorFlashErrorKind, ReadNorFlash,
 };
 
-#[repr(align(4))]
+#[repr(C, align(4))]
 struct FlashWordBuffer {
+    // NOTE: Ensure that no unaligned fields are added above `data` to maintain its required alignment
     data: [u8; FlashStorage::WORD_SIZE as usize],
 }
 
@@ -207,8 +208,9 @@ mod test {
     const MAX_OFFSET: u32 = SECTOR_SIZE * 1;
     const MAX_LENGTH: u32 = SECTOR_SIZE * 2;
 
-    #[repr(align(4))]
+    #[repr(C, align(4))]
     struct TestBuffer {
+        // NOTE: Ensure that no unaligned fields are added above `data` to maintain its required alignment
         data: MaybeUninit<[u8; FLASH_SIZE as _]>,
     }
 
