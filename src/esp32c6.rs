@@ -36,3 +36,9 @@ pub(crate) fn esp_rom_spiflash_write(dest_addr: u32, data: *const u32, len: u32)
         esp_rom_spiflash_write(dest_addr, data, len)
     })
 }
+
+pub fn park_other_core() -> bool {
+    false
+}
+
+pub fn unpark_other_core(_enable: bool) {}
