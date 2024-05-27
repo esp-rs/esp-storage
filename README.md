@@ -1,5 +1,9 @@
 # esp-storage
 
+---
+## This project has moved! It can now be found in the [esp-rs/esp-hal](https://github.com/esp-rs/esp-hal/tree/main/esp-storage) repository.
+---
+
 This implements [`embedded-storage`](https://github.com/rust-embedded-community/embedded-storage) traits to access unencrypted ESP32 flash.
 
 ## Current support
